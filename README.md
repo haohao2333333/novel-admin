@@ -6,9 +6,8 @@
 
 ## 进展
 
-- 项目后端没有使用 Thymeleaf 模板引擎,或是jsp + servlet这种十年前的老技术，采用了 vue + spring boot 前后端分离架构
-- 因为只学过一些基础, 用饿了么UI布局的时候, 导航栏会把移动端的界面挡住,很不美观,所以就采用了 饿了么UI Drawer抽屉的方式.
-- 因为自己是学后端的, 前端是用一些基于bootstrap的响应式模板写的,但在改的时候还是有很多问题,自适应折叠导航栏在移动端打不开,就用了bootstrap折叠 + 饿了么UI Drawer抽屉的方式做了,界面可能不太美观,但功能实现的还是很好的.
+- 后端没有使用 Thymeleaf 模板引擎,或是jsp + servlet这种十年前的老技术，采用了 vue + spring boot 前后端分离架构
+- 后台整合了 Spring Security的登录认证（Authentication）访问授权（Authorization），**实现用户的注册、登录和角色权限的访问控制**
 
 ## 技术
 
@@ -32,3 +31,5 @@
 |     Spring Boot      | 2.3.4.RELEASE |
 |     Spring Cloud     |  Hoxton.SR8   |
 | Spring Cloud Alibaba | 2.2.3.RELEASE |
+
+## API 接口

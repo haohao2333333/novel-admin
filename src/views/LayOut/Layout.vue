@@ -1,12 +1,12 @@
 <template>
-    <el-button class="language" mb-2 round @click="toggle">{{ $t('buttons.switchLanguage') }}</el-button>
+    <el-button class="language" mb-2 round @click="toggle">切换语言</el-button>
     <div class="common-layout">
         <el-container>
             <!-- 导航栏 -->
             <el-header class="common-header flex-float">
                 <div class="flex">
                     <img class="logo" src="../../assets/bj001.jpg" alt="" />
-                    <h1 class="title">切换语言</h1>
+                    <h1 class="title">novel-admin</h1>
                 </div>
                 <!-- 退出 -->
                 <el-button type="danger" round plain @click="loginOut">退出</el-button>
@@ -26,12 +26,21 @@
                         </el-sub-menu>
                         <el-sub-menu index="2">
                             <template #title>
+                                <el-icon><UserFilled /></el-icon>
+                                <span>角色管理</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="/role">角色列表</el-menu-item>
+                            </el-menu-item-group>
+                        </el-sub-menu>
+                        <el-sub-menu index="3">
+                            <template #title>
                                 <el-icon><Menu /></el-icon>
                                 <span>小说管理</span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="/role">小说列表</el-menu-item>
-                                <el-menu-item index="/role">添加小说</el-menu-item>
+                                <el-menu-item index="/novel">小说列表</el-menu-item>
+                                <el-menu-item index="/novelAdd">添加小说</el-menu-item>
                             </el-menu-item-group>
                         </el-sub-menu>
                     </el-menu>

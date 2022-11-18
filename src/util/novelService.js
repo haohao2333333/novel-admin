@@ -6,15 +6,15 @@ const NETWORK_ERROR = '网络请求异常, 请稍后重试OoO'
 
 let loadingOBJ = null
 
-const Service = axios.create({
+const NovelService = axios.create({
     timeout:6000,
-    baseURL: "/api/user",
+    baseURL: "/api/novel",
     headers:{
         'Content-Type':'application/json;charset=utf-8'
     }
 })
 // 请求拦截器，内部根据返回值，重新组装，统一管理。
-Service.interceptors.request.use((req) =>{
+NovelService.interceptors.request.use((req) =>{
     loadingOBJ = ElLoading.service({
         lock: true,
         text: '加载中...',
@@ -27,7 +27,7 @@ Service.interceptors.request.use((req) =>{
     return req
 })
 // 响应拦截器
-Service.interceptors.response.use((res) =>{
+NovelService.interceptors.response.use((res) =>{
     const { code, data, messsage } = res.data
     if( code == 200 ) {
         return res.data
@@ -38,4 +38,4 @@ Service.interceptors.response.use((res) =>{
     }
 })
 
-export default Service
+export default NovelService
