@@ -37,14 +37,35 @@
             </el-table>
             <el-pagination background layout="prev, pager, next" :total="1000" />
         </div>
+        <!-- 添加小说弹窗 -->
+        <el-dialog v-model="novelChapterAddFormVisible" title="添加小说章节">
+            <!-- Form 表单 -->
+            <el-form
+            ref="novelChapterForm" 
+            :model="novelChapterData" 
+            :rules="rules"
+            >   
+                <el-form-item label="章节数" prop="chapter_num">
+                    <el-input v-model="novelChapterData.chapter_num" placeholder="请输入章节数" />
+                </el-form-item>
+                <el-form-item label="章节名" prop="chapter_name">
+                    <el-input v-model="novelChapterData.chapter_name" placeholder="请输入章节名" />
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="novelAddFormVisible = false">取消</el-button>
+                    <el-button type="primary" @click="save(novelChapterForm)">添加</el-button>
+                </span>
+            </template>
+        </el-dialog>
     </div>
-
 </template>
 
 <script>
 import {useRoute,useRouter} from 'vue-router'
-import { reactive, onMounted, computed, toRefs, nextTick,onUpdated } from 'vue'
-import { novelChapterListByIdApi } from '/src/util/novelApi'
+import { reactive, toRefs,ref } from 'vue'
+import { novelChapterListByIdApi,novelByIdApi,novelChapterAddApi } from '/src/api/novelApi'
 
 export default {
     name: "novelChapter",
@@ -52,22 +73,90 @@ export default {
         const route = useRoute();
         const router = useRouter();
         const state = reactive({
+            novel: {
+                id: "",
+                novel_name: ""
+            },
             novelChapterList: [],
+            novelChapterData: {
+                novel_id: "",
+                chapter_num: "",
+                chapter_name: ""
+            },
+            rules:{
+                chapter_name:[
+                    {required:true,message:"章节名必填奥",trigger:"blur"}
+                ],
+            },
+            novelChapterAddFormVisible: false,
         });
+        // 查询章节列表
         const novelChapterListById = () =>{
             const { id } = route.params
             novelChapterListByIdApi(id).then(res=>{
                 state.novelChapterList = res.data;
             })
         }
+        const novelById = () => {
+            const { id } = route.params
+            novelByIdApi(id).then(res=>{
+                console.log("用户数据",res);
+                state.novel = res.data
+            })
+        }
+        // 添加小说章节
+        const add=()=>{
+            state.novelChapterAddFormVisible=true
+            state.novelChapterData.novel_id = state.novel.id
+        }
+        // 添加小说章节
+        const save=(novelChapterForm)=>{
+            novelChapterForm.validate(res=>{
+                console.log(res);
+                if(!res){
+                    return
+                }
+                novelChapterAddApi(state.novelChapterData).then(res=>{
+                    console.log(res);
+                    if(res){
+                        // 关闭弹窗
+                        state.novelChapterAddFormVisible=false
+                        // 清空form
+                        state.novelChapterData={
+                            novel_id: "",
+                                novel_desc: "",
+                                chapter_num: "",
+                                chapter_name: "",
+                            }
+                        // 方法初始化
+                        novelChapterListById()
+                    }
+                })
+            })
+        }
+        // 查看小说
+        const ViewNovel=row=>{
+        // state.novelId = row.id
+            router.push({ path: `/novel/${row.novel_id}/${row.id}` })
+        }
+        // 初始化方法
         novelChapterListById()
+        novelById()
+        const novelChapterForm = ref()
         return {
             ...toRefs(state),
+            add,
+            save,
+            novelChapterListById,
+            novelById,
+            novelChapterForm,
+            ViewNovel,
+
         }
     }
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

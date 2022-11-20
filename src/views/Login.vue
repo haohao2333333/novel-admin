@@ -29,7 +29,7 @@
 import { reactive,toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from "vue-router"
-import { loginApi } from '../util/request.js'
+import { loginApi } from '/src/api/request'
 
 export default {
   name: "Login",
@@ -44,13 +44,15 @@ export default {
       },
     })
     const handleLogin=()=>{
+      // 判读账号密码是否输入，没有则alert 出来
         loginApi(data.loginForm).then(res=>{
-        if(res){
+        if(res.data){
           console.log(res.data);
-          store.commit('setUserInfo', res.data);
-          localStorage.setItem("loginForm",JSON.stringify(data.loginForm))
+          userToken = "Bearer " + res.data.body.token;
+          Authorization: userToken,
           // 跳转/user
           router.push({ path: `/user` })
+          alert("登陆成功");  
         }
       })
     }
@@ -58,7 +60,7 @@ export default {
       ...toRefs(data),
       handleLogin,
     }
-  }
+  },
 }
 </script>
 
@@ -88,7 +90,7 @@ h1{
     height: 380px;
     border: 1px solid rgba(255,255,255,0.2);
     backdrop-filter: blur(5px);
-    background: rgba(50,50,50,0.4);
+    background: rgba(50,50,50,0.2);
     margin-top: 20px;
 }
 

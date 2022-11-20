@@ -1,11 +1,9 @@
 <template>
   <div id="app"> 
-
    <el-config-provider>
       <!-- 路由占位符 --> 
       <router-view></router-view>
     </el-config-provider>
-
   </div>
 </template>
 

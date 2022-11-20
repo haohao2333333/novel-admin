@@ -1,12 +1,11 @@
 <template>
-    <el-button class="language" mb-2 round @click="toggle">切换语言</el-button>
     <div class="common-layout">
         <el-container>
             <!-- 导航栏 -->
             <el-header class="common-header flex-float">
                 <div class="flex">
                     <img class="logo" src="../../assets/bj001.jpg" alt="" />
-                    <h1 class="title">novel-admin</h1>
+                    <h1 class="title">小说后台</h1>
                 </div>
                 <!-- 退出 -->
                 <el-button type="danger" round plain @click="loginOut">退出</el-button>
@@ -40,7 +39,6 @@
                             </template>
                             <el-menu-item-group>
                                 <el-menu-item index="/novel">小说列表</el-menu-item>
-                                <el-menu-item index="/novelAdd">添加小说</el-menu-item>
                             </el-menu-item-group>
                         </el-sub-menu>
                     </el-menu>
@@ -59,8 +57,6 @@
 
 <script>
 import { computed, ref } from 'vue'
-import zhCn from 'element-plus/lib/locale/lang/zh-cn'
-import en from 'element-plus/lib/locale/lang/en'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 
@@ -70,28 +66,17 @@ export default{
         const store = useStore()
         const router = useRouter()
         const loginOut=()=>{
-            localStorage.removeItem("loginForm")
+            localStorage.removeItem('Authorization');
             store.commit("setUserInfo", {})
             router.push({
                 path:'/login'
             })
         }
-        // 语言国际化
-        const language = ref('zh-cn')
-        const locale = computed(() => (language.value === 'zh-cn' ? zhCn : en))
-
-        const toggle = () => {
-            language.value = language.value === 'zh-cn' ? 'en' : 'zh-cn'
-        }
         return{
-            language,locale,toggle,
             loginOut,
         }
     }
 }
-
-
-
 </script>
 
 <style>

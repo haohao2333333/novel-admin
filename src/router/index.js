@@ -38,8 +38,13 @@ const routes = [
           },
           {
             path:"/novel/:id",
-            name: 'novelAdd',
+            name: 'novelChapter',
             component:()=>import('../views/pages/novel/novelChapter.vue')
+          },
+          {
+            path:"/novel/:id/:chapterId",
+            name: 'novelAdd',
+            component:()=>import('../views/pages/novel/novelAdd.vue')
           },
         ]
     }
@@ -50,26 +55,19 @@ const router = createRouter({
   routes
 })
 
-// 路由守卫
-router.beforeEach((to,from,next)=>{
-  /* 
-      to: 从哪个页面
-      from: 到哪个页面
-      next: 只有执行next 页面才会进行跳转
-  */
-  // 判断用户是否登录
-  const uInfo = store.state.uInfo.userInfo
-  if(!uInfo.username){
-    if(to.path=='/login'){
-      next()
-      return
-    }
-    next("/login")
-  }else{
-    next()
+// 路由守卫 登录拦截 本地没有存token,请重新登录
+router.beforeEach((to, from, next) => { 
+  if (to.path === '/login') {
+      next();  
+  } else {
+      let token = localStorage.getItem('Authorization');    
+      if (token === 'null' || token === '') {
+          next('/login');    
+      } else {
+          next();    
+      }  
   }
-
-})
+});
 
 /**
  * 导出 基础路由  

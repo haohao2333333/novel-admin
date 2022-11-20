@@ -24,7 +24,15 @@ Service.interceptors.request.use((req) =>{
         loadingOBJ.close()
       }, 233)
     // jwt token
+    if (localStorage.getItem('Authorization'))
+     {      
+        config.headers.Authorization = localStorage.getItem('Authorization');    
+     }
     return req
+   
+}, error => {
+    ElMessage.error("请求出错了哇咔咔")
+    return Promise.reject(error);  
 })
 // 响应拦截器
 Service.interceptors.response.use((res) =>{

@@ -24,7 +24,7 @@
             </div>
             <!-- 表格 -->
             <el-table :data="userList" style="width: 100%">
-                <el-table-column prop="id" label="id" width="100" />
+                <el-table-column prop="user_id" label="id" width="100" />
                 <el-table-column prop="username" label="用户名" width="180" />
                 <el-table-column prop="name" label="名字" width="180" />
                 <el-table-column prop="email" label="邮箱" width="180" />
@@ -110,7 +110,7 @@
 
 <script>
 import { reactive, toRefs,ref } from 'vue'
-import { userListApi,userAddApi,userChangeStateApi,userDelApi,userUpdateApi } from '../../util/request.js'
+import { userListApi,userAddApi,userChangeStateApi,userDelApi,userUpdateApi } from '/src/api/request'
 import { ElMessage } from 'element-plus'
 
 export default{    
@@ -217,7 +217,7 @@ export default{
         // 修改用户状态
         const switchChange=row=>{
             // console.log("操作的数据状态更改",row)
-            userChangeStateApi(row.id,row.state,row).then(res=>{
+            userChangeStateApi(row.user_id,row.state,row).then(res=>{
                 // console.log(res);
                 if(res.data){
                     findByName()
@@ -230,7 +230,7 @@ export default{
             // 打开修改弹窗
             data.dialogFormEditVisible=true
             // 展示数据
-            data.formData2.id = row.id
+            data.formData2.user_id = row.user_id
             data.formData2.username = row.username
             data.formData2.password = row.password
             data.formData2.name = row.name
@@ -243,7 +243,7 @@ export default{
                 if(!res){
                     return
                 }
-                userUpdateApi(data.formData2.id,data.formData2).then(res=>{
+                userUpdateApi(data.formData2.user_id,data.formData2).then(res=>{
                     // console.log(res);
                     if(res){
                         // 关闭弹窗
@@ -257,7 +257,7 @@ export default{
         // 删除用户
         const delUser=row=>{
             // console.log("删除的数据",row)
-            userDelApi(row.id).then(res=>{
+            userDelApi(row.user_id).then(res=>{
                 // console.log(res);
                 if(res) {
                     // 方法初始化

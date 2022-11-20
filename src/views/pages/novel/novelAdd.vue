@@ -3,7 +3,9 @@
         <!-- 面包屑 -->
         <el-breadcrumb :separator-icon="ArrowRight">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>小说添加</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/novel' }">小说列表</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{}" >小说章节</el-breadcrumb-item>
+        <el-breadcrumb-item>小说内容</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="page_content">
             小说名：
@@ -31,14 +33,20 @@
 </template>
 
 <script>
+import {useRoute,useRouter} from 'vue-router'
+import { onBeforeUnmount, ref, shallowRef, onMounted,toRefs,reactive } from 'vue'
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
-
-import { onBeforeUnmount, ref, shallowRef, onMounted } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 
 export default {
   components: { Editor, Toolbar },
   setup() {
+    const route = useRoute();
+    const router = useRouter();
+    const state = reactive({
+
+    })
+    /*---------------富文本编辑器-----------*/
     // 编辑器实例，必须用 shallowRef
     const editorRef = shallowRef()
 
@@ -67,12 +75,13 @@ export default {
     }
 
     return {
-      editorRef,
-      valueHtml,
-      mode: 'default', // 或 'simple'
-      toolbarConfig,
-      editorConfig,
-      handleCreated
+        ...toRefs(state),
+        editorRef,
+        valueHtml,
+        mode: 'default', // 或 'simple'
+        toolbarConfig,
+        editorConfig,
+        handleCreated
     };
   }
 }

@@ -6,8 +6,8 @@ export function loginApi(params) {
 }
 
 // 查询所有用户
-export function userListApi() {
-    return axios.get('/user');
+export function userListApi(params) {
+    return axios.get('/user', { params });
 }
 
 // 用户添加

@@ -41,7 +41,14 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination background layout="prev, pager, next" :total="1000" />
+            <!-- 分页 -->
+            <el-pagination 
+            background
+            layout="total, prev, pager, next, jumper"
+            :total="total"
+            :page-count="pages"
+            @current-change="ChangePage"
+            />
         </div>
         <!-- 添加小说弹窗 -->
         <el-dialog v-model="novelAddFormVisible" title="添加小说">
@@ -120,8 +127,7 @@
 <script>
 import {useRoute,useRouter} from 'vue-router'
 import { reactive, toRefs,ref } from 'vue'
-import { NovelListApi,NovelCategoryListApi,novelAddApi,novelUpdateApi,novelDelApi } from '/src/util/novelApi.js'
-
+import { NovelListApi,NovelPageListApi,NovelCategoryListApi,novelAddApi,novelUpdateApi,novelDelApi } from '/src/api/novelApi'
 
 export default{    
     name:'novel',
@@ -129,8 +135,10 @@ export default{
         const route = useRoute();
         const router = useRouter();
         const state = reactive({
-            keyWord:"",
-            novelId: "",
+            total: 0,
+            pageNum:1,
+            pageSize:5,
+            pages:0,
             novelList: [],
             NovelCategoryList: [],
             novelData: {
@@ -159,20 +167,35 @@ export default{
             novelAddFormVisible: false,
             novelEditFormVisible: false,
         })
-        // 查找小说
-        const findByName=()=>{
-            NovelListApi().then(res=>{
-                if(res.data){
-                    console.log("小说数据",res);
-                    state.novelList=res.data
-                }
+        // 分页查询
+        const findByPages=()=>{
+            NovelPageListApi(state.pageNum,state.pageSize).then(res=>{
+                state.total = res.data.total
+                state.pages = res.data.pages
+                console.log("小说分页数据",res);
+                state.novelList=res.data.list
             })
         }
+        // 分页
+        const ChangePage=(pageNum)=>{
+            // console.log("小说页数",pageNum);
+            state.pageNum = pageNum
+            findByPages()
+        }
+        // 查找小说
+        // const findByName=()=>{
+        //     NovelListApi().then(res=>{
+        //         if(res.data){
+        //             console.log("小说数据",res);
+        //             state.novelList=res.data
+        //         }
+        //     })
+        // }
         // 类目列表
         const NovelCategory=()=>{
             NovelCategoryListApi().then(res=>{
                 if(res.data){
-                    console.log("小说类目数据",res);
+                    // console.log("小说类目数据",res);
                     state.NovelCategoryList=res.data
                 }
             })
@@ -202,7 +225,7 @@ export default{
                                 category_name: "",
                             }
                         // 方法初始化
-                        findByName()
+                        findByPages()
                     }
                 })
             })
@@ -234,7 +257,7 @@ export default{
                         // 关闭弹窗
                         state.novelEditFormVisible=false
                         // 方法初始化
-                        findByName()
+                        findByPages()
                     }
                 })
             })
@@ -246,19 +269,22 @@ export default{
                 // console.log(res);
                 if(res) {
                     // 方法初始化
-                    findByName()
+                    findByPages()
                 }
             })
         }
         // 方法初始化
-        findByName()
+        // findByName()
+        findByPages()
         NovelCategory()
         const novelForm = ref()
         const novelForm2 = ref()
         return {
             ...toRefs(state),
-            findByName,
+            findByPages,
+            // findByName,
             NovelCategory,
+            ChangePage,
             add,
             save,
             novelForm,
