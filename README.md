@@ -31,8 +31,3 @@
 |     Spring Boot      | 2.3.4.RELEASE |
 |     Spring Cloud     |  Hoxton.SR8   |
 | Spring Cloud Alibaba | 2.2.3.RELEASE |
-
-<<<<<<< HEAD
-=======
-## API 接口
->>>>>>> 04a82176c16445015e66a4a7770b504febf1518f
